@@ -1,23 +1,21 @@
-import Vue from 'vue'
-import axios from 'axios'
-import App from './App.vue'
 
-Vue.config.productionTip = false;
-Vue.prototype.$http = axios;
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import Axios from 'axios'
+
+Vue.prototype.$http = Axios;
+
+const token = localStorage.getItem('user-token')
+if (token) {
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = token
+}
+
+Vue.config.productionTip = false
 
 new Vue({
-  render: h => h(App),
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app')
-/*new Vue({
-    el: '#test',
-    data () {
-        return {
-            info: null
-        }
-    },
-    mounted () {
-        axios
-            .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-            .then(response => (this.info = response))
-    }
-})*/
