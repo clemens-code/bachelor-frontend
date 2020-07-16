@@ -4,7 +4,6 @@ import store from './store.js'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import Login from './components/Login.vue'
-import Secure from './components/Secure.vue'
 
 Vue.use(Router)
 
@@ -20,14 +19,6 @@ let router = new Router({
             path: '/login',
             name: 'login',
             component: Login
-        },
-        {
-            path: '/secure',
-            name: 'secure',
-            component: Secure,
-            meta: {
-                requiresAuth: true
-            }
         },
         {
             path: '/about',
