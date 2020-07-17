@@ -4,6 +4,7 @@ import store from './store.js'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import Login from './components/Login.vue'
+import Images from "./components/Images";
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ let router = new Router({
             path: '/about',
             name: 'about',
             component: About
+        },
+        {
+            path: '/images',
+            name: 'images',
+            component: Images
         }
     ]
 })
