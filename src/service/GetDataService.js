@@ -10,10 +10,13 @@ let configHeader = localStorage.getItem('token');
 
 export async function allData () {
     try{
-        //console.log(configHeader);
+        console.log(configHeader);
+        if(configHeader == null)
+            allData();
         const req = await axios.get(BASE_URL + 'all', {headers: {Authorization: 'Bearer '+ configHeader}});
         return req.data;
     }catch (e) {
+        this.$store.dispatch('logout')
         console.log(e);
     }
 }

@@ -8,6 +8,7 @@
             <input id="search_group" type="radio" value="group" v-model="search_for"/>
             <label for="search_group">Group</label>
         </form>
+        <h2 v-if="userIsntLogedIn">Please Login to see the Data!</h2>
         <ul v-for="info in filteredInformations">
             <li>id: {{info._id}}</li>
             <li>{{info.information}}</li>
@@ -17,18 +18,25 @@
 </template>
 
 <script>
-    //import getDataService from '../service/GetDataService';
     import {allData} from '../service/GetDataService';
     export default {
         data() {
             return{
+                userIsntLogedIn: '',
                 infos: [],
                 search: '',
                 search_for:''
             };
         },
         mounted() {
-            allData().then(result => this.infos = result)
+            if(this.$store.getters.isLoggedIn) {
+                this.userIsntLogedIn=false;
+                allData().then(result => this.infos = result);
+            }else{
+                this.userIsntLogedIn=true;
+                console.log(this.userIsntLogedIn)
+            }
+
         },
         computed:{
             filteredInformations: function () {

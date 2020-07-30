@@ -21,9 +21,8 @@
         },
         methods: {
             login: function () {
-                let username = this.email
-                let password = this.password
-                console.log("Name: "+username+" PSWD: "+ password);
+                let username = this.email;
+                let password = this.password;
                 this.$store.dispatch('login', { username: username, password: password })
                     .then(() => this.$router.push('/'))
                     .catch(err => console.log(err))
