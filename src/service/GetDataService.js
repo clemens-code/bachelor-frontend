@@ -11,41 +11,36 @@ let configHeader = localStorage.getItem('token');
 export async function allData () {
     try{
         console.log(configHeader);
-        if(configHeader == null)
-            allData();
         const req = await axios.get(BASE_URL + 'all', {headers: {Authorization: 'Bearer '+ configHeader}});
         return req.data;
     }catch (e) {
-        this.$store.dispatch('logout')
         console.log(e);
+        window.location.href = '/login';
     }
 }
 
-export async function getDataWithImage() {
-    // var imageURL = '';
-    // await axios.get(BASE_URL+'image/11', {headers: {Authorization: 'Bearer '+ configHeader}, responseType: 'arraybuffer'})
-    //     .then(resp =>{
-    //         var arrayBufferView = new Uint8Array(resp);
-    //         var blob = new Blob([arrayBufferView], {type: "image/jpeg"});
-    //         var urlCreator = window.URL || window.webkitURL;
-    //         this.imageURL = urlCreator.createObjectURL(blob);
-    //     });
-    // return this.imageURL;
-    try {
-        return axios.get(BASE_URL+'image/11', {headers: {Authorization: 'Bearer '+ configHeader}, responseType: 'arraybuffer'})
-            .then(response => `data:${response.headers['content-type']};base64,${btoa(String.fromCharCode(...new Uint8Array(response.data)))}`);
-        
-        // return axios.get(BASE_URL+'image/11', {headers: {Authorization: 'Bearer '+ configHeader}, responseType: 'arraybuffer'})
-        //     .then(response => Buffer.from(response.data, 'binary').toString('base64'));
-        
-        
-        // const req = await axios.get(BASE_URL+'image/11', {headers: {Authorization: 'Bearer '+ configHeader}, responseType: 'arraybuffer'});
-        // console.log(req.data);
-        // return req.data;
-    }catch (e) {
-        console.log(e);
-    }
+export async function getDataWithImages() {
+    const infos = await allData();
+    console.log(infos)
+    const dataWithImages = [];
+    const images = [];
+    infos.forEach(async function (info, _id) {
+        try {
+            const imageBytes = await axios.get(BASE_URL+'image/'+info._id, {headers: {Authorization: 'Bearer '+ configHeader}, responseType: 'arraybuffer'})
+                .then(response => Buffer.from(response.data, 'binary').toString('base64'));
+            images.push("data:image/jpg;base64,"+imageBytes);
+            dataWithImages.push(new DataWithImages(info, "data:image/jpg;base64,"+imageBytes));
+        }catch (e) {
+            console.log(e);
+        }
+    });
+    console.log(dataWithImages);
+    return dataWithImages;
 }
 
+function DataWithImages(info, imageInBytes) {
+    this.info = info;
+    this.imageInBytes = imageInBytes;
+}
 
 
